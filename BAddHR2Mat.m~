@@ -1,0 +1,22 @@
+function BAddHR2Mat()
+parpool local 8
+matNames = load('matNames.mat');
+newMatNames = ones(matNames) * true;
+parfor i = 1:length(matNames)
+    tmp = load(matNames{i});%matNames{i}
+    ecg = BRemoveNan(ecg);
+    try
+        rpos = AHRDetection(tmp.ecg);
+        saveInParfor(matNames{i},tmp.bp,tmp.bpann,tmp.ecg,rpos,ppg,tm)
+    catch e   
+        newMatNames(i) = false;
+    end
+end
+newMatNames = matNames{newMatNames};
+save('newMatNames.mat','newMatNames');
+parpool close
+end
+
+function saveInParfor(fileName,bp,bpann,ecg,rpos,ppg,tm) 
+    save(fileName,'bp','bpann','ecg','rpos','ppg','tm');
+end
