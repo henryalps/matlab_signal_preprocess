@@ -1,5 +1,9 @@
-function isLegal = BIsSignalLegal(sig)
-    THEROLD = 0.3;
+function isLegal = BIsSignalLegal(bp, ecg, ppg, rpos)
+    
+end
+
+function isLegal = BIsSignalMostlyEffective(sig)
+    THEROLD = 0.4;
     %% 先把所有的NaN替换掉
     sig = BRemoveNan(sig);
     %% 求一阶差分零值数
@@ -13,4 +17,9 @@ end
 
 function isLegal = BIsBPPosLegal(bppos)
     config = BReadConfig();
+    isLegal = length(bppos) > config.timelength;
+end
+
+function isLegal = BIsEcgPosLegal(rpos)
+    isLegal = BIsBPPosLegal(rpos);
 end

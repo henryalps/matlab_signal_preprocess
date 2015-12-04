@@ -1,4 +1,11 @@
-function isLegal = BIsSignalLegal(sig)
+function isLegal = BIsSignalLegal(bp, ecg, ppg, rpos)
+    isLegal = BIsSignalMostlyEffective(bp) && ...
+        BIsSignalMostlyEffective(ecg) &&...
+        BIsSignalMostlyEffective(ppg) &&...
+        BIsEcgPosLegal(rpos);
+end
+
+function isLegal = BIsSignalMostlyEffective(sig)
     THEROLD = 0.4;
     %% 先把所有的NaN替换掉
     sig = BRemoveNan(sig);
