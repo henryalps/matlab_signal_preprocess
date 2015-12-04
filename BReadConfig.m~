@@ -1,0 +1,11 @@
+function config = BReadConfig()
+try
+    config = load('config.mat');
+catch e
+    if ~isfield(config, 'exist')
+        config.exist=true;
+        save('config.mat','config');
+    end
+end
+config.samplerate=getSampleRate();
+end
