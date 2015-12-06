@@ -6,23 +6,16 @@ segpos = segpos(seglength > 1);
 seglength=seglength(seglength > 1);
 
 sbppos = ones(1,length(bppos))*NaN;
-sbpindex = 1;
+bpindex = 1;
 dbppos = sbppos;
-dbpindex = 1;
-%% 开始寻找SBP
+%% 开始寻找DBP
 for i=1:length(segpos)
     for j=1:seglenth(i) - 1
-        sbppos(sbpindex) = bppos(segpos(i)  + j);
-        [~ , dbppos(bpindex)] = max(bp(bppos(segpos(i) + j), bppos(segpos(i) + j + 1)));
-        dbppos(dbpindex) = dbppos(dbpindex) + sbppos(sbpindex) - 1;
-        sbpindex = sbpindex + 1;
-        dbpindex = dbpindex + 1;
+        sbppos(bpindex) = bppos(segpos(i  + j));
+        [~ , dbppos(bpindex)] = max(bp(bppos(segpos(i  + j)), bppos(segpos(i  + j + 1))));
+        dbppos(bpindex) = dbppos(dbpindex) + sbppos(sbpindex) - 1;
     end
-    sbppos(sbpindex) = bppos(segpos(i) + seglength(i));
-    sbpindex = sbpindex + 1;
+    sbppos()
 end
-
-sbppos=sbppos(~isnan(sbppos));
-dbppos=dbppos(~isnan(dbppos));
 
 end
