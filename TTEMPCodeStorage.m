@@ -1,3 +1,44 @@
+%% 绘制信号和包络
+% close all
+% [upe,downe]=envelope(bp,30,'peak');
+% figure
+% plot(bp)
+% hold on
+% % plot(upe,'g--')
+% % plot(downe,'b--')
+% plot((upe+downe)/2, 'r--')
+% return
+
+%% 包络算法，未考虑边界条件
+% close all
+% fs=30;
+% t=0:1/fs:200;
+% x6=sin(2*pi*2*t)+sin(2*pi*4*t);
+% x66 = hilbert(x6);
+% xx = abs(x66+j*x6);
+% % figure(1)
+% % hold on
+% % plot(t,x6);
+% % plot(t,xx,'r')
+% % xlim([0 5])
+% % hold off
+% d = diff(x6);
+% n = length(d);
+% d1 = d(1:n-1);
+% d2 = d(2:n);
+% indmin = find(d1.*d2<0 & d1<0)+1;
+% indmax = find(d1.*d2<0 & d1>0)+1;
+% envmin = spline(t(indmin),x6(indmin),t);
+% envmax = spline(t(indmax),x6(indmax),t);
+% figure
+% hold on
+% % plot(t,x6);
+% plot(t,envmin,'r');
+% plot(t,envmax,'m');
+% hold off
+% xlim([0 5])
+% return
+
 %% plot dbp estimate result
 % close all
 % figure
@@ -6,6 +47,14 @@
 % plot(sbpann,bp(sbpann),'*r');
 % plot(dbpann,bp(dbpann),'og');
 % return
+
+%% just plot bp
+close all
+figure
+plot(bp)
+hold on
+plot(bpann, bp(bpann), '*r');
+return
 
 %% plot ppg
 % close all

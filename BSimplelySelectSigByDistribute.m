@@ -11,7 +11,7 @@ function isLegal = isBpLegalByBpann(bp,bpann,timelen)
         return
     end
     %% 2. confident min and max
-    [minVal,maxVal] = getConfidentMinAndMaxBySegment(bp);
+    [minVal,maxVal] = AGetConfidentMinAndMaxBySegment(bp);
     isLegal = isSigLegalWithMinAndMax(minVal,maxVal);
     if ~isLegal
         return
@@ -31,8 +31,7 @@ function isLegal = isECGLegalByRPos(ecg,rpos,timelen)
         return
     end
     %% 3. If the ecg val on rpos changes too frequently, not legal
-    THEROLD = 0.1;
-    if std(ecg(rpos),1) > (maxVal - minVal) * THEROLD
+    if std(ecg(rpos),1) > (maxVal - minVal) * Constants.THEROLD_STD
         isLegal = false;
         return
     end
@@ -48,13 +47,3 @@ function isLegal = isSigLegalWithMinAndMax(minVal,maxVal)
     isLegal = minVal ~= maxVal;        
 end
 
-function [minVal,maxVal] = getConfidentMinAndMaxBySegment(sig)
-    SEGNUM = 10;
-    sigSeg = buffer(sig,SEGNUM);
-    
-    minVals = min(sigSeg,[],2);
-    maxVals = max(sigSeg,[],2);
-    
-    minVal = median(minVals);
-    maxVal = median(maxVals);
-end
