@@ -1,0 +1,5 @@
+function pos = AGetRandomPossInArray(array, ratio)
+%% 随机获取数组中一系列随机的位置，位置所占长度为(数组长度×ratio)
+% OUTPUT
+% pos - []
+end
