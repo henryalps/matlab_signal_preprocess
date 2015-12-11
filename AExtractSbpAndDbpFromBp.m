@@ -27,7 +27,7 @@ function [sbpann,dbpann,isLegal] = AExtractSbpAndDbpFromBp(bp, bpann,tm)
         
         sbpann = bpann(sbpann);
         dbpann = bpann(dbpann);
-        if max(length(sbpann), length(dbpann)) < tm(end)
+        if max(length(sbpann), length(dbpann)) < tm(end) * Constants.THEROLD_ANN_LEN_MIN_SCALE
             isLegal = false;
             return
         end

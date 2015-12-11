@@ -16,7 +16,7 @@ function [minVal,maxVal,hasCutoff] = AGetConfidentMinAndMaxBySegment(sig)
     %%判断截止失真
     tblmin = tabulate(minVals);
     tblmax = tabulate(maxVals);
-    hasCutoff = max(tblmin(:,3)) >= THEROLD || min(tblmax(:,3)) >= THEROLD;  
+    hasCutoff = max(tblmin(:,3)) >= THEROLD || max(tblmax(:,3)) >= THEROLD;  
     %
     
     minVal = median(minVals);

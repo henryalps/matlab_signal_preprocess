@@ -40,6 +40,10 @@
 % return
 
 %% plot dbp estimate result
+% clear
+% load('matNamesSelectedByDistribute1.mat');
+% load(matNamesSelectedByDistribute1{4})
+% [sbpann, dbpann,islegal ] = AExtractSbpAndDbpFromBp(bp, bpann, tm);
 % close all
 % figure
 % plot(bp)
@@ -49,12 +53,12 @@
 % return
 
 %% just plot bp
-close all
-figure
-plot(bp)
-hold on
-plot(bpann, bp(bpann), '*r');
-return
+% close all
+% figure
+% plot(bp)
+% hold on
+% plot(bpann, bp(bpann), '*r');
+% return
 
 %% plot ppg
 % close all
@@ -113,11 +117,12 @@ return
 %     return;
 
 %% 对一组测试信号，计算所有特征-血压组，并写入到csv文件中
+clear all
 load('testdata.mat');
 TRAIN_RATIO = 0.8;
 %% 1 计算逐拍脉搏波特征
 [ppgwfeatures, ppgwfeaturenames] =...
-    calculatePWFeaturesWithoutDic(bp, peaks, onsets);
+    calculatePWFeaturesWithoutDic(ppg, peaks, onsets);
 %% 2 计算pwtt
 pwt=BGetPwttAdapter(ecg, rpos, peaks);
 %% 3 确定所有的有效窗口，并得到对应的特征值和血压值
