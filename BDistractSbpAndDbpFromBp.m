@@ -42,7 +42,7 @@ for i=1:length(segpos)
         typebpos(typebindex) = typebpos(typebindex) + typeapos(typeaindex) - 1;
         % 找到两个最大点后，就开始反向更新typea的值
         if j >= 1
-            if type == Constants.TYPE_DBP            
+            if type == Constants.TYPE_DBP           
                 [~ , typeapos(typeaindex)] = min(bp(typebpos(typebindex - 1):typebpos(typebindex)));
             else            
                 [~ , typeapos(typeaindex)] = max(bp(typebpos(typebindex - 1):typebpos(typebindex)));
@@ -55,10 +55,11 @@ for i=1:length(segpos)
         typeaindex = typeaindex + 1;
     end
     
-    % 将typea掐头去尾
-%     typeapos(typeaindex) = bppos(segpos(i) + seglength(i));
-%     typeaindex = typeaindex + 1;
-    
+    % 将typea掐头, 去尾(只针对血压)
+    if type == Constants.TYPE_PPG_PEAK
+            typeapos(typeaindex) = bppos(segpos(i) + seglength(i));
+            typeaindex = typeaindex + 1;
+    end
 end
 
 typeapos=typeapos(~isnan(typeapos));
@@ -73,7 +74,9 @@ else
 end
 
 %% 最后把不合法值剔除掉
-sbpann = BSelectLegalIndexesWithReasonableValue(bp, sbpann, Constants.TYEP_SBP);
-dbpann = BSelectLegalIndexesWithReasonableValue(bp, dbpann, Constants.TYPE_DBP);
+if type ~=Constants.TYPE_PPG_PEAK
+    sbpann = BSelectLegalIndexesWithReasonableValue(bp, sbpann, Constants.TYEP_SBP);
+    dbpann = BSelectLegalIndexesWithReasonableValue(bp, dbpann, Constants.TYPE_DBP);
+end
 
 end

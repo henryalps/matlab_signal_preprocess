@@ -2,9 +2,6 @@ function [features,featurenames,sbps,dbps] ...
     =  BGetFeatureAndBpGroups(bp, ecg, ppg, ...
         sbpann, dbpann, rpos, ppgpeaks, ppgonsets, ppgfeatures, ppgfeaturenames, pwt)
     %%
-    % INPUT
-    % ppgfeatures  长度为21的元胞数组，每个元素都是2列矩阵，其长度参差不齐
-    % ppgfeaturenames  长度为21的元胞数组，每个元素都是一个ppg波形特征的名字
     % OUTPUT
     % features  [k*N]矩阵 k为特征数，N为窗口数
     % featurenames {k*1} 元胞数组 存储所有特征名
@@ -13,21 +10,22 @@ function [features,featurenames,sbps,dbps] ...
     segtimelen = 60; % 分段长度1min
     bpseglen = 5; % 血压量化间隔为5
 
-    %% 在BP中找到所有合法的信号段位置
-    [pos,~] = getAllLegalSegPos(bp, {dbpann, sbpann}, segtimelen);
+    %% 在BP中找到所有合法的信号段位置 - 添加了SBP/DBP区分算法后试图取消该步骤，失败
+     [pos,~] = getAllLegalSegPos(bp, {dbpann, sbpann}, segtimelen);
     %% 在ECG中找到所有合法的信号段位置
     [tmp,~] = getAllLegalSegPos(ecg, {rpos}, segtimelen);
-    pos = tmp & pos;    
+     pos = tmp & pos;    
     %% 在PPG中找到所有合法的信号段位置 不使用PWT作为标准，因为PPG和ECG并未完全同步
-    [tmp,seglen] = getAllLegalSegPos(ppg, {ppgpeaks(:,1), ppgonsets(:,1)}, segtimelen);
-    pos = tmp & pos;    
+    % - 添加了Onset位置估计算法后试图取消该步骤，失败
+     [tmp,seglen] = getAllLegalSegPos(ppg, {ppgpeaks(:,1), ppgonsets(:,1)}, segtimelen);
+     pos = tmp & pos;    
     %% 转化为绝对位置
-    tmp = (1:length(tmp)) * seglen;
+    tmp = (0:length(tmp)) * seglen + 1;
     pos = tmp(pos);
     %% 当最后一个窗口越界时，舍弃之
-    if pos(end) + seglen > length(bp)
-        pos = pos(1:end - 1);
-    end
+%     if pos(end) + seglen > length(bp)
+%         pos = pos(1:end - 1);
+%     end
     
     %% 对所有合法的信号段，分别获取特征-血压值对
     sbps = zeros(1, length(pos));
@@ -58,7 +56,7 @@ function [features,featurenames,sbps,dbps] ...
         features(:,i) = [hr_miu, hr_delta, hr_iqr, hr_skew,...
             pwtt_mean, ppgwfeatures(:)', ppgsfeatures(:)']' ;
     end
-%     % 将血压值量化到以5为量化间隔的区间上，以便分类 - 换用随机森林分类器后，取消量化
+%     % 将血压值量化到以5为量化间隔的区间上，以便分类 - 换用随机森林拟合器后，取消量化
 %     sbps = AGetDiscretedSig(sbps, bpseglen);
 %     dbps = AGetDiscretedSig(dbps, bpseglen);
     featurenames = [{'hr_miu', 'hr_delta', 'hr_iqr', 'hr_skew'},{'pwtt_mean'},...
@@ -71,7 +69,6 @@ function [pos,seglen] = getAllLegalSegPos(sig, marker, segtimelen)
 % marker - m个cell数组，每个数组的长度接近于约n*segtimelen*SAMPLERATE
 % - 标定数据(每一个marker的值都对应于一个特征点在sig中的位置) m为标定数据的路数，比如血压有SBP与DBP两路标定。
 % segtimelen - 把信号分为k段，每一段的时长都为segtimelen（秒）。若有超出，则丢弃。
-    THEROLD = 0.4;% 当标定数据在某个时间段内的数量/时长（秒）小于这个值时，认为数据不合法。
    
     seglen = segtimelen * getSampleRate();
     segnum = floor(length(sig) / seglen);
@@ -89,7 +86,7 @@ function [pos,seglen] = getAllLegalSegPos(sig, marker, segtimelen)
             tmp = sum((tmp >= lowRange) & (tmp < upRange), 2);
             tmp = tmp / segtimelen;
             % 4 某个位置范围可用的前提是范围内的所有标定都有足够数量
-            pos = pos & (tmp > THEROLD);
+            pos = pos & (tmp >= Constants.THEROLD_ANN_LEN_MIN_SCALE_FRAME);
     end
 end
 

@@ -1,3 +1,14 @@
+%% 测试代码
+% for i=1:10
+%     switch i
+%         case 1
+%         case 2
+%             break
+%     end
+%     disp(i)
+% end
+% return
+
 %% 绘制信号和包络
 % close all
 % [upe,downe]=envelope(bp,30,'peak');
@@ -67,12 +78,20 @@
 % return
 
 %% plot ppg detection result
-% close all
-% figure
-% plot(ppg)
-% hold on
-% plot(ppgpeakpos(:,1), ppg(ppgpeakpos(:,1)),'or');
-% return
+close all
+clear
+load('matNamesSelectedByDistribute1.mat');
+load(matNamesSelectedByDistribute1{20})
+% [ppgpeakpos,ppgonsetpos] = detectPeakAndOnsetsInBPWave(ppg');
+% tpeaks = detetectPeaksInPulseWave(ppg', 60); 
+% [ppgpeakpos,ppgonsetpos] = BDistractSbpAndDbpFromBp(ppg, tpeaks(:,1),Constants.TYPE_PPG_PEAK);
+[onsets, peaks] = BGetOnsetsAndPeaksOfPPG(ppg, tm);
+figure
+plot(ppg)
+hold on
+plot(peaks(:,1), ppg(peaks(:,1)),'or');
+plot(onsets(:,1), ppg(onsets(:,1)),'*g');
+return
 
 %% 在同一个图中画3种信号及其标定
 % close all

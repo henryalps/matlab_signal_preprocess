@@ -1,12 +1,16 @@
 function [sbpann,dbpann,isLegal] = AExtractSbpAndDbpFromBp(bp, bpann,tm)
     %% 将本来在一个数组中的收缩/舒张压位置分散到两个数组中。
     %% 数组中可能只有舒张压位置，也可能只有收缩压位置
+    % INPUT
+    % bpann [1*n] 收缩-舒张压位置混合数组
     % OUTPUT
     % sbpann [n*1] 收缩压
     % dbpann [m*1] 舒张压
     % isLegal 1*1 bool 信号是否有效
+    sbpann = [];
+    dbpann = [];
     
-    % 1 获取血压的‘合理’最大与最小值
+    % 1 获取血压的‘合理’最大与最小值, 并判断是否有截止失真
     [minbp, maxbp,isLegal] = AGetConfidentMinAndMaxBySegment(bp);
     isLegal = ~isLegal;
     if ~isLegal
