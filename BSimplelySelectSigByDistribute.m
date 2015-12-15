@@ -25,7 +25,7 @@ function isLegal = isECGLegalByRPos(ecg,rpos,timelen)
         return
     end
     %% 2. confident min and max
-    [minVal,maxVal] = getConfidentMinAndMaxBySegment(ecg);
+    [minVal,maxVal] = AGetConfidentMinAndMaxBySegment(ecg);
     isLegal = isSigLegalWithMinAndMax(minVal,maxVal);
     if ~isLegal
         return
@@ -39,7 +39,7 @@ function isLegal = isECGLegalByRPos(ecg,rpos,timelen)
 end
 
 function isLegal = isPPGLegalByMinAndMax(ppg)
-    [minVal,maxVal] = getConfidentMinAndMaxBySegment(ppg);
+    [minVal,maxVal] = AGetConfidentMinAndMaxBySegment(ppg);
     isLegal = isSigLegalWithMinAndMax(minVal,maxVal);
 end
 

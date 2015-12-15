@@ -8,7 +8,7 @@ function BWriteMats2CSV(csvfilename, datamat, namecell)
 % <><><><><><><><><>
 % <><><datamat<><><>
 % <><><><><><><><><>
-FILEPATH = '/home/test/Herui-Matlab/data/csv'; % '/mnt/code/matlab/data/csv';
+FILEPATH = '/home/test/Herui-Matlab/data/csv';%'/home/test/Herui-Matlab/data/csv'; % '/mnt/code/matlab/data/csv';
 if ~exist(FILEPATH,'dir') 
 %     error(['WRITE CSV FAIL! directory does not exist: ',FILEPATH]);
     return

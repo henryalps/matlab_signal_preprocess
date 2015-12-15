@@ -78,20 +78,20 @@
 % return
 
 %% plot ppg detection result
-close all
-clear
-load('matNamesSelectedByDistribute1.mat');
-load(matNamesSelectedByDistribute1{20})
-% [ppgpeakpos,ppgonsetpos] = detectPeakAndOnsetsInBPWave(ppg');
-% tpeaks = detetectPeaksInPulseWave(ppg', 60); 
-% [ppgpeakpos,ppgonsetpos] = BDistractSbpAndDbpFromBp(ppg, tpeaks(:,1),Constants.TYPE_PPG_PEAK);
-[onsets, peaks] = BGetOnsetsAndPeaksOfPPG(ppg, tm);
-figure
-plot(ppg)
-hold on
-plot(peaks(:,1), ppg(peaks(:,1)),'or');
-plot(onsets(:,1), ppg(onsets(:,1)),'*g');
-return
+% close all
+% clear
+% load('matNamesSelectedByDistribute1.mat');
+% load(matNamesSelectedByDistribute1{20})
+% % [ppgpeakpos,ppgonsetpos] = detectPeakAndOnsetsInBPWave(ppg');
+% % tpeaks = detetectPeaksInPulseWave(ppg', 60); 
+% % [ppgpeakpos,ppgonsetpos] = BDistractSbpAndDbpFromBp(ppg, tpeaks(:,1),Constants.TYPE_PPG_PEAK);
+% [onsets, peaks] = BGetOnsetsAndPeaksOfPPG(ppg, tm);
+% figure
+% plot(ppg)
+% hold on
+% plot(peaks(:,1), ppg(peaks(:,1)),'or');
+% plot(onsets(:,1), ppg(onsets(:,1)),'*g');
+% return
 
 %% 在同一个图中画3种信号及其标定
 % close all

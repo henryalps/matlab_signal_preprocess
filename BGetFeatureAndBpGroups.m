@@ -21,6 +21,9 @@ function [features,featurenames,sbps,dbps] ...
      pos = tmp & pos;    
     %% 转化为绝对位置
     tmp = (0:length(tmp)) * seglen + 1;
+    if length(tmp) >= 2
+        tmp(2:end) = tmp(2:end) - 1;
+    end
     pos = tmp(pos);
     %% 当最后一个窗口越界时，舍弃之
 %     if pos(end) + seglen > length(bp)
@@ -48,7 +51,7 @@ function [features,featurenames,sbps,dbps] ...
         ppgwfeatures = getLegalSigMeanValues(ppgfeatures, pos(i), pos(i) + seglen);
        %% 对每一个有效信号窗，计算窗内PPG统计特征。窗的帧宽度为5s。
         [ppgsfeatures, ppgsfeaturenames] = ...
-            BGetAllStatisticFeaturesOfAWindow(ppg(pos(i):pos(i) + seglen), 5 * getSampleRate());
+        BGetAllStatisticFeaturesOfAWindow(ppg(pos(i):pos(i) + seglen), 5 * getSampleRate());
        %% 对每一个有效信号窗，计算HR特征
         validrpos = replaceNanByZero(rpos(rpos>pos(i) & rpos<pos(i) + seglen));
         [hr_miu, hr_delta, hr_iqr, hr_skew] ...

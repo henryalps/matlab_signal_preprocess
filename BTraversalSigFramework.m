@@ -10,9 +10,9 @@ function BTraversalSigFramework(filename)
     %% --BEFORE-- %%
     switch WHICHONE
         case 1
-            matNames = matNames.newNewMatNames;
+            matNames = matNames.newMatNames;%newNewMatNames;
         case 2
-            matNames = matNames.matNamesSelectedByDistribute1;
+            matNames = matNames.matNamesSelectedByBpAndPpg;
             matNames{1} = matNames{2};
             winNums = zeros(1,length(matNames)); % 某个mat所对应的有效窗口数量
     end
@@ -22,12 +22,28 @@ function BTraversalSigFramework(filename)
      %% --PROCESS-- %%
     for i=3:length(matNames)
         sigs = load(matNames{i});
-        
+        try
         switch WHICHONE
             case 1
                 if ~BSimplelySelectSigByDistribute(sigs.bp,sigs.ecg,sigs.ppg,...
                     sigs.bpann,sigs.rpos,sigs.tm)
                     forSave(i)=false;
+                    close all
+                    xlowerlim = 1;
+                    xupperlim = 2000;
+                    figure
+                    subplot(3,1,1)
+                    plot(sigs.bp)
+                    xlim([xlowerlim,xupperlim])
+                    subplot(3,1,2)
+                    plot(sigs.ecg)
+                    xlim([xlowerlim,xupperlim])
+%                     hold on
+%                     plot(sigs.rpos,sigs.ecg(sigs.rpos),'*r');
+                    subplot(3,1,3)
+                    plot(sigs.ppg)
+                    xlim([xlowerlim,xupperlim])
+                    pause
                 end
             case 2
                 % 1 求收缩-舒张压并确定数据组是否可用
@@ -51,14 +67,18 @@ function BTraversalSigFramework(filename)
                 [features,featurenames,sbps,dbps] = BGetFeatureAndBpGroups(sigs.bp, sigs.ecg, sigs.ppg, ...
                         sbpann, dbpann, sigs.rpos, peaks, onsets, ppgfeature, ppgfeaturename, pwt);
                 % 6 写入到mat文件
-                writeinparfor(matNames{i},sigs.bp, sigs.ecg, sigs.ppg, sigs.bpann,...
-                        sbpann, dbpann, sigs.rpos, peaks, onsets, ppgfeature, ppgfeaturename, pwt, sigs.tm)
+%                 writeinparfor(matNames{i},sigs.bp, sigs.ecg, sigs.ppg, sigs.bpann,...
+%                         sbpann, dbpann, sigs.rpos, peaks, onsets, ppgfeature, ppgfeaturename, pwt, sigs.tm)
                 % 7 写入到csv文件
                 data = [features;sbps;dbps]';
                 name = [featurenames, 'sbps', 'dbps'];
-                BWriteMats2CSV([matNames{i}(1:end-length('.mat')),'.csv'], data, name);
+%                 BWriteMats2CSV([matNames{i}(1:end-length('.mat')),'.csv'], data, name);
                 % 8 计量窗口总数
                 winNums(i) = numel(sbps);
+        end
+        catch e
+            disp(e)
+            continue
         end
     end
 
