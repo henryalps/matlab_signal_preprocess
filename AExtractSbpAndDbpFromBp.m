@@ -22,8 +22,8 @@ function [sbpann,dbpann,isLegal] = AExtractSbpAndDbpFromBp(bp, bpann,tm)
     
     % 3 将标准差与血压极差×阈值进行对比，如果偏大，则说明数组中同时有两种血压，否则说明只有一种
     if annstd  > (maxbp - minbp) * Constants.THEROLD_STD
-        % 3.5 如果同时有两种，那么利用包络将两种血压分离开，再用较长者的长度筛选一下，确定是否有效
-        [bpevpup, bpevpdown] = envelope(bp,30,'peak');
+        % 3.5 如果同时有两种，那么利用减采样包络将两种血压分离开，再用较长者的长度筛选一下，确定是否有效
+        [bpevpup, bpevpdown] = envelope(bp,getSampleRate(),'peak');
         bpevp = (bpevpup + bpevpdown) / 2;
         bpevp = bpevp(bpann);
         sbpann = bp(bpann) > bpevp;

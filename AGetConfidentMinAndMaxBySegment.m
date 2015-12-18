@@ -3,7 +3,13 @@ function [minVal,maxVal,hasCutoff] = AGetConfidentMinAndMaxBySegment(sig)
 % OUTPUT
 % 信号的‘合理’最大与最小值
 % hasCutoff 1*1 bool 信号是否有严重截止失真
+    MINSEGNUM = 10;
+
     SEGNUM = getSampleRate();
+    % 防止信号太短
+    if length(sig) < SEGNUM
+        SEGNUM = mod(MINSEGNUM, length(sig));
+    end
     THEROLD = 50; % 认为出现了截止失真的阈值
     sigSeg = buffer(sig, floor(length(sig)/SEGNUM));
     sigSeg = sigSeg(:, 1:SEGNUM)';

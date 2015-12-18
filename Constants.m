@@ -13,6 +13,8 @@ classdef Constants
         
         MIN_SBP = 60
         MIN_DBP = 20
+        
+        APPENDIX_LONG_RECORD = '/home/test/WFDBDATA/3.new/'
     end
 end
 

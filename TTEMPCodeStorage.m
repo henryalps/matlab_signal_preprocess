@@ -1,3 +1,28 @@
+%% 测试读取文件为一系列字符串的函数
+
+fid = fopen('currentnames');
+tline = fgetl(fid);
+i = 1;
+while ischar(tline)
+    yamlnames{i} = tline;
+    i = i+1;
+    tline = fgetl(fid);
+end
+fclose(fid);
+return;
+
+%% 测试影响envelop速度的因素
+% sig =rand(100000,1);
+% hilbetlen = 50000;
+% meanval = 0;
+% for i=1:10
+%     tic
+%     envelope(sig, hilbetlen, 'peak');
+%     meanval = meanval + toc;
+% end
+% meanval = meanval/i
+% return
+
 %% 测试代码
 % for i=1:10
 %     switch i

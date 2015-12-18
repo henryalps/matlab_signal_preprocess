@@ -9,19 +9,18 @@
 % end
 % save('matNames');
 
-load('newMatNames.mat');
+load('matNames.mat');
 for i = 1:length(matNames)
     close all
     disp(matNames{i});
     load(matNames{i});%matNames{i}
-%     bp = BRemoveNan(bp(1:500));
+    ecg = BRemoveNan(ecg(1:500));
     try
-        detectPeakAndOnsetsInBPWave(bp');
-%         pos = AHRDetection(bp);
+        pos = AHRDetection(ecg);
         figure
-        plot(ppg)
-%         hold on 
-%         plot(bpann,bp(bpann),'*');
+        plot(ecg)
+        hold on 
+        plot(pos,ecg(pos),'*');
         pause
     catch e
         disp(e)

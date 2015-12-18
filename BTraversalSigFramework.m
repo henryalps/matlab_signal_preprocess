@@ -1,11 +1,11 @@
 function BTraversalSigFramework(filename)
 %% filename:the file which save all the signal name 's name
 %     POOL = parpool('local',4);
-    WHICHONE = 2;% Select Running function
+    WHICHONE = 3;% Select Running function
     % 1 - Select signal with method 1
     % 2 - 获取所有的有效数据组及特征，并写入到csv文件，同时将特征附加到mat文件
-    matNames = load(filename);
-    
+    % 3 - 对出现错误的数据组，分析错误原因，解决错误后，再采取同2一致的做法
+    matNames = load(filename);    
 
     %% --BEFORE-- %%
     switch WHICHONE
@@ -15,12 +15,16 @@ function BTraversalSigFramework(filename)
             matNames = matNames.matNamesSelectedByBpAndPpg;
             matNames{1} = matNames{2};
             winNums = zeros(1,length(matNames)); % 某个mat所对应的有效窗口数量
+            errorMatNames = matNames;
+            index = 1;
+        case 3
+            matNames = matNames.errorMatNames;
     end
     
     forSave = true(1,length(matNames)); %this variable may not use
 
      %% --PROCESS-- %%
-    for i=3:length(matNames)
+    for i=1:length(matNames)
         sigs = load(matNames{i});
         try
         switch WHICHONE
@@ -45,7 +49,10 @@ function BTraversalSigFramework(filename)
                     xlim([xlowerlim,xupperlim])
                     pause
                 end
-            case 2
+            case 2   
+            case 3
+                % 0 将NaN替换为0
+                sigs = BReplaceAllNanInSigsInStruct(sigs, 0);
                 % 1 求收缩-舒张压并确定数据组是否可用
                 [sbpann, dbpann, islegal ] = AExtractSbpAndDbpFromBp(sigs.bp, sigs.bpann, sigs.tm);
                 if ~islegal
@@ -67,17 +74,19 @@ function BTraversalSigFramework(filename)
                 [features,featurenames,sbps,dbps] = BGetFeatureAndBpGroups(sigs.bp, sigs.ecg, sigs.ppg, ...
                         sbpann, dbpann, sigs.rpos, peaks, onsets, ppgfeature, ppgfeaturename, pwt);
                 % 6 写入到mat文件
-%                 writeinparfor(matNames{i},sigs.bp, sigs.ecg, sigs.ppg, sigs.bpann,...
-%                         sbpann, dbpann, sigs.rpos, peaks, onsets, ppgfeature, ppgfeaturename, pwt, sigs.tm)
+                writeinparfor(matNames{i},sigs.bp, sigs.ecg, sigs.ppg, sigs.bpann,...
+                        sbpann, dbpann, sigs.rpos, peaks, onsets, ppgfeature, ppgfeaturename, pwt, sigs.tm)
                 % 7 写入到csv文件
                 data = [features;sbps;dbps]';
                 name = [featurenames, 'sbps', 'dbps'];
-%                 BWriteMats2CSV([matNames{i}(1:end-length('.mat')),'.csv'], data, name);
+                BWriteMats2CSV([matNames{i}(1:end-length('.mat')),'.csv'], data, name);
                 % 8 计量窗口总数
-                winNums(i) = numel(sbps);
+                winNums(i) = numel(sbps);           
         end
         catch e
             disp(e)
+            errorMatNames{index} = matNames{i};
+            index = index+1;
             continue
         end
     end
@@ -88,7 +97,6 @@ function BTraversalSigFramework(filename)
             matNamesSelectedByDistribute1 = matNames{forSave};
             save('matNamesSelectedByDistribute1.mat','matNamesSelectedByDistribute1');
         case 2
-            disp(forSave)
             matNamesSelectedByBpAndPpg = matNames(forSave);
             winNums = winNums(forSave);
             save('matNamesSelectedByBpAndPpg.mat', 'matNamesSelectedByBpAndPpg', 'winNums');

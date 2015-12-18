@@ -124,7 +124,7 @@ data = data./std(data);
 checkSign = sort(data,'descend');
 signFLAG = mean(abs(checkSign(length(data)-round(0.1*length(checkSign)):length(data))))>mean(abs(checkSign(1:round(0.1*length(checkSign)))));
 if (signFLAG) && verbose        
-     disp('input channel inverted due to possible negative QRS manifestation');
+%      disp('input channel inverted due to possible negative QRS manifestation');
      data = -data;
 end
 
@@ -202,10 +202,10 @@ count_thresAbove = count_thresAbove/2;
 thresholdI1 = thresholdI1/2;
 thresholdF1 = thresholdF1/2;
 i = i + 1;
-if (i >= 3)&& verbose
-    %disp(['QRS-detector notification (Pan&Tompkins):']);
-    disp(['threshold reduced during learning phase of dataset' str_ident ]);
-end
+% if (i >= 3)&& verbose
+%     %disp(['QRS-detector notification (Pan&Tompkins):']);
+%     disp(['threshold reduced during learning phase of dataset' str_ident ]);
+% end
 
 % generation of corresponding index-pairs for threshold-exceeding regions
 start_region_index = (find(diff(aboveCommon) == 1))+1;
@@ -266,7 +266,7 @@ if (learned ~= 0)
     qrs_pos(1,3) = imax2;
     %re-initialize thresholds for qrs-detection regarding first two detections
     RR_init = imax2-imax1;
-    if verbose;disp(['RR_init: ' num2str(RR_init/fs) ' s']);end
+%     if verbose;disp(['RR_init: ' num2str(RR_init/fs) ' s']);end
     
     posMask = aboveBackup(start_region_index(j):end_region_index(k));
     negMask = negativeCommon(start_region_index(j):end_region_index(k));
@@ -291,7 +291,7 @@ if (learned ~= 0)
 end
 
 if (learned == 0)
-    disp(['QRS-detection learning phase of dataset ' str_ident ' was not successful.']);
+%     disp(['QRS-detection learning phase of dataset ' str_ident ' was not successful.']);
 %     disp('Using  Joachims P&T instead..')
 %     qrs_pos = qrs_detect(data);
     return
@@ -452,9 +452,9 @@ while ((finished == 0)&&(ceil((1.66*RR1)+actual_index)<=length(data)))
         i = i + 1;
         if (i >= 3)
             proc_per_QRS = proc_per_QRS+1;
-            if (verbose)
-            disp(['threshold reduced during detection phase of dataset ' str_ident ' - segment ' num2str(actual_index) '-' num2str(end_segment)]);
-            end
+%             if (verbose)
+%             disp(['threshold reduced during detection phase of dataset ' str_ident ' - segment ' num2str(actual_index) '-' num2str(end_segment)]);
+%             end
         end
 
         % generation of corresponding index-pairs for threshold-exceeding regions
@@ -562,11 +562,11 @@ while ((finished == 0)&&(ceil((1.66*RR1)+actual_index)<=length(data)))
     if (length(qrs_pos) >= 2)
     RR_new = qrs_pos(1,length(qrs_pos))-qrs_pos(1,length(qrs_pos)-1);
         
-    if (replaceQRS == 0)&& verbose
-        disp(['recent RR-interval: ' num2str(RR_new/fs) ' s']);
-    elseif verbose
-        disp(['recent RR-interval: ' num2str(RR_new/fs) ' s (replaced)']);
-    end
+%     if (replaceQRS == 0)&& verbose
+%         disp(['recent RR-interval: ' num2str(RR_new/fs) ' s']);
+%     elseif verbose
+%         disp(['recent RR-interval: ' num2str(RR_new/fs) ' s (replaced)']);
+%     end
     
     if (isempty(find(isnan(RR_AV1vec(1,:)))))
         if(replaceQRS == 0)
@@ -606,7 +606,7 @@ while ((finished == 0)&&(ceil((1.66*RR1)+actual_index)<=length(data)))
             end
         end
     elseif verbose
-        disp('RR-regularity dumped - out of 92-116% RR-variance');
+%         disp('RR-regularity dumped - out of 92-116% RR-variance');
     end
     end    
     
@@ -656,7 +656,7 @@ while ((finished == 0)&&(ceil((1.66*RR1)+actual_index)<=length(data)))
         end_add = end_add + fs;
         %reducing thresholds again
         thres_add = thres_add*0.5;
-        if verbose;disp(['additive calculation loop due to missing QRS-detection after regular processing phase...']);end
+%         if verbose;disp(['additive calculation loop due to missing QRS-detection after regular processing phase...']);end
         %compensation of threshold recalculation 
         if (initial_TA)
             thres_add = thres_add*0.5;
