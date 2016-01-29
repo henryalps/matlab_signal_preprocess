@@ -13,9 +13,9 @@ function [sbpann,dbpann,isLegal] = AExtractSbpAndDbpFromBp(bp, bpann,tm)
     % 1 获取血压的‘合理’最大与最小值, 并判断是否有截止失真
     [minbp, maxbp,isLegal] = AGetConfidentMinAndMaxBySegment(bp);
     isLegal = ~isLegal;
-    if ~isLegal
-        return
-    end
+%     if ~isLegal
+%         return
+%     end
     
     % 2 计算bpann混合数组的标准差
     annstd = std(bp(bpann), 1);
@@ -31,10 +31,10 @@ function [sbpann,dbpann,isLegal] = AExtractSbpAndDbpFromBp(bp, bpann,tm)
         
         sbpann = bpann(sbpann);
         dbpann = bpann(dbpann);
-        if max(length(sbpann), length(dbpann)) < tm(end) * Constants.THEROLD_ANN_LEN_MIN_SCALE
-            isLegal = false;
-            return
-        end
+%         if max(length(sbpann), length(dbpann)) < tm(end) * Constants.THEROLD_ANN_LEN_MIN_SCALE
+%             isLegal = false;
+%             return
+%         end
         
         if length(sbpann) > length(dbpann)
             [sbpann, dbpann] = BDistractSbpAndDbpFromBp(bp, sbpann, Constants.TYEP_SBP);

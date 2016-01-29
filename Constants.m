@@ -15,6 +15,10 @@ classdef Constants
         MIN_DBP = 20
         
         APPENDIX_LONG_RECORD = '/home/test/WFDBDATA/3.new/'
+        APPENDIX_LONG_RECORD_CSV = '/home/test/Herui-Matlab/data/csv-long'
+        
+        MAX_HR = 180
+        MIN_HR = 40
     end
 end
 

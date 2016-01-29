@@ -1,7 +1,7 @@
 function BTraversalSigFramework(filename)
 %% filename:the file which save all the signal name 's name
 %     POOL = parpool('local',4);
-    WHICHONE = 3;% Select Running function
+    WHICHONE = 1;% Select Running function
     % 1 - Select signal with method 1
     % 2 - 获取所有的有效数据组及特征，并写入到csv文件，同时将特征附加到mat文件
     % 3 - 对出现错误的数据组，分析错误原因，解决错误后，再采取同2一致的做法
@@ -85,8 +85,8 @@ function BTraversalSigFramework(filename)
         end
         catch e
             disp(e)
-            errorMatNames{index} = matNames{i};
-            index = index+1;
+%             errorMatNames{index} = matNames{i};
+%             index = index+1;
             continue
         end
     end

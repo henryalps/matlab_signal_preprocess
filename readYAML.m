@@ -2,12 +2,12 @@ function readYAML(fileName)
 %% readYAML(fileName) is used to read all the files listed in the file with 'fileName',
 %% and extact the data infomation 
 % POOL = parpool('local',8);
-names = getnamesfromfile(fileName);
+names = BGetNamesFromFile(fileName);
 dataFileName = cell(length(names), 1);
 % 记录着所有有效的数据文件的位置
 effectiveDataFileNames = true(1, length(dataFileName));
 % 得到目前已经处理过的数据
-currentnames = getnamesfromfile(strcat(Constants.APPENDIX_LONG_RECORD, 'currentnames'));
+currentnames = BGetNamesFromFile(strcat(Constants.APPENDIX_LONG_RECORD, 'currentnames'));
 for i=1:length(names)
     try        
           %% 1.读取fileName中记录的每一个yaml文件名所对应的一组数据，获得abp，ecg和ppg
@@ -75,26 +75,6 @@ end
 function saveInParfor(matName, bp, sbpann, dbpann, ecg, rpos, ppg, ppgpeak, ppgvalley) 
     save(strcat(Constants.APPENDIX_LONG_RECORD,matName,'.mat'), ...
         'bp', 'sbpann', 'dbpann', 'ecg', 'rpos', 'ppg', 'ppgpeak', 'ppgvalley');
-end
-
-%% read lines from a file to a cell
-% input 
-%  fileName - String - all *.yaml files' name are listed in this file, one name per
-%  line
-% output
-%  yamlnames - cell String array - names of yaml file
-function yamlnames = getnamesfromfile(fileName)
-    fid = fopen(fileName);
-    
-    tline = fgetl(fid);
-    i = 1;
-    while ischar(tline)
-        yamlnames{i} = tline;
-        i = i+1;
-        tline = fgetl(fid);
-    end
-
-    fclose(fid);
 end
 
 %% input: yaml file name

@@ -13,6 +13,7 @@ ecg_peak = [rpos(:), ecg(rpos)];
 [pwtt, ecg_peak_used, ppg_used] = ...
     computeTimeInterval(ecg_peak, ppg_peak, 0, 10000);
 
-%% 3 去除统计异常点
+%% 3 去除统计异常点 -- 此处矩阵格式有修改
+pwtt = [pwtt, ppg_used(:,1)];
 pwtt = removeOutlier(pwtt, 2, 10);
 end
