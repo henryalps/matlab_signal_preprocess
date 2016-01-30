@@ -17,7 +17,6 @@ classdef Constants
         APPENDIX_LONG_RECORD = '/home/test/WFDBDATA/3.new/'
         APPENDIX_LONG_RECORD_CSV = '/home/test/Herui-Matlab/data/csv-long'
         APPENDIX_PACE_2_PACE_LONG_CSV = '/home/test/Herui-Matlab/data/csv-pace-2-pace/long'
-        APPENDIX_TEST = '/home/henryalps/software/csv'
         
         MAX_HR = 180
         MIN_HR = 40

@@ -22,7 +22,7 @@ for i=shift:shift+len-1
         [~, legalppgpos, ~] = intersect(sigs.ppgpeak(:,1), lpwt(:,3));
         [features,featureNames]  = calculatePWFeaturesWithoutDic(sigs.ppg, sigs.ppgpeak(legalppgpos,:), sigs.ppgvalley(legalppgpos,:));
         %%% 可能有些拍并没有特征，需要逐个特征去辨识
-        features = getMergedPPGFeatures(features,lpwt);
+        features = getMergedPPGFeatures(features);
         %% 找到所有的合法心搏节拍对应的血压节拍
         [~, irposdbp, ifeatdbp] = intersect(rdbp, features(:,1));
         [~, irpossbp, ifeatsbp] = intersect(rsbp, features(:,1));
@@ -49,7 +49,7 @@ function rpos = getLegalRpos(rpos)
     rpos = rpos(drpos < 60 / Constants.MIN_HR & drpos > 60 / Constants.MAX_HR);
 end
 
-function mergedppgfeatures = getMergedPPGFeatures(ppgfeatures, lpwt)
+function mergedppgfeatures = getMergedPPGFeatures(ppgfeatures, ppgpeakpos)
     %% getMergedPPGFeatures用于获取那些全部脉搏波特征都存在的节拍，
      %     并返回这些节拍对应的r波位置以及特征序列
      pos = ppgfeatures{1};
@@ -61,7 +61,7 @@ function mergedppgfeatures = getMergedPPGFeatures(ppgfeatures, lpwt)
      end
      mergedppgfeatures = zeros(length(pos), length(ppgfeatures) + 1);
     % 找到有效的PPG波峰位置对应的R波波峰位置，并存储到结果的第一列内
-    [~, pPpgPeakIndex, ~] = intersect(lpwt(:,3), pos);
+    [~, pPpgPeakIndex, ~] = intersect(ppg, pos);
     mergedppgfeatures(:, 1) = lpwt(pPpgPeakIndex, 1);
      for idex=1:length(ppgfeatures)
          tmp = ppgfeatures{idex};
