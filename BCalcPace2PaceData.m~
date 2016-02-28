@@ -17,16 +17,20 @@ for i=shift:shift+len-1
         [rdbp, irposdbp, iannposdbp] = intersect(lpwt(:,1), ldbpann(:,1));
         [rsbp, irpossbp, iannpossbp] = intersect(lpwt(:,1), lsbpann(:,1));
         %%% 取所有的脉搏波合法节拍，计算特征
-        % 把有效的血压节cd拍对应的心搏节拍/PPG节拍筛选出来
+        % 把有效的血压节拍对应的心搏节拍/PPG节拍筛选出来
         lpwt = lpwt(union(irpossbp, irposdbp), :); 
         [~, legalppgpos, ~] = intersect(sigs.ppgpeak(:,1), lpwt(:,3));
         [features,featureNames]  = calculatePWFeaturesWithoutDic(sigs.ppg, sigs.ppgpeak(legalppgpos,:), sigs.ppgvalley(legalppgpos,:));
         %%% 可能有些拍并没有特征，需要逐个特征去辨识
-        features = getMergedPPGFeatures(features);
+        features = getMergedPPGFeatures(features,lpwt);
         %% 找到所有的合法心搏节拍对应的血压节拍
         [~, irposdbp, ifeatdbp] = intersect(rdbp, features(:,1));
         [~, irpossbp, ifeatsbp] = intersect(rsbp, features(:,1));
-        features = [features, zeros(size(features,1), 2)];
+        features = [features, zeros(size(features,1), 4)];
+        %% 计算每一拍所对应的心率
+        
+        %% 筛选出每一合法节拍所对应的pwt
+        [~, irpospwt, ~] = intersect()
         features(ifeatsbp, end-1) = sigs.bp(lsbpann(iannpossbp(irpossbp), 3));
         features(ifeatdbp, end) = sigs.bp(ldbpann(iannposdbp(irposdbp), 3)); 
 
@@ -49,7 +53,7 @@ function rpos = getLegalRpos(rpos)
     rpos = rpos(drpos < 60 / Constants.MIN_HR & drpos > 60 / Constants.MAX_HR);
 end
 
-function mergedppgfeatures = getMergedPPGFeatures(ppgfeatures, ppgpeakpos)
+function mergedppgfeatures = getMergedPPGFeatures(ppgfeatures, lpwt)
     %% getMergedPPGFeatures用于获取那些全部脉搏波特征都存在的节拍，
      %     并返回这些节拍对应的r波位置以及特征序列
      pos = ppgfeatures{1};
@@ -61,7 +65,7 @@ function mergedppgfeatures = getMergedPPGFeatures(ppgfeatures, ppgpeakpos)
      end
      mergedppgfeatures = zeros(length(pos), length(ppgfeatures) + 1);
     % 找到有效的PPG波峰位置对应的R波波峰位置，并存储到结果的第一列内
-    [~, pPpgPeakIndex, ~] = intersect(ppg, pos);
+    [~, pPpgPeakIndex, ~] = intersect(lpwt(:,3), pos);
     mergedppgfeatures(:, 1) = lpwt(pPpgPeakIndex, 1);
      for idex=1:length(ppgfeatures)
          tmp = ppgfeatures{idex};

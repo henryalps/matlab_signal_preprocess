@@ -9,15 +9,15 @@ for i=shift:shift+len-1
         lrpos = getLegalRpos(sigs.rpos);
        %% 1 重新计算pwt，现在计算出的pwt结果为三列：
         % [ecg的r波位置 pwt值 对应的ppg波峰位置 ]
-        lpwt=BGetPwttAdapter(sigs.ecg, lrpos, sigs.ppgpeak);        
+        lpwt=BGetPwttAdapter(sigs.ecg, lrpos(:,1), sigs.ppgpeak);        
        %% 2 根据pwt的存在性确认合法的血压节拍
-        ldbpann = BGetPwttAdapter(sigs.ecg, lrpos, sigs.dbpann');
-        lsbpann = BGetPwttAdapter(sigs.ecg, lrpos, sigs.sbpann');
+        ldbpann = BGetPwttAdapter(sigs.ecg, lrpos(:,1), sigs.dbpann');
+        lsbpann = BGetPwttAdapter(sigs.ecg, lrpos(:,1), sigs.sbpann');
        %% 3 取dbpann与sbpann对应合法节拍的并集，计算特征，并保存到csv文件
         [rdbp, irposdbp, iannposdbp] = intersect(lpwt(:,1), ldbpann(:,1));
         [rsbp, irpossbp, iannpossbp] = intersect(lpwt(:,1), lsbpann(:,1));
         %%% 取所有的脉搏波合法节拍，计算特征
-        % 把有效的血压节cd拍对应的心搏节拍/PPG节拍筛选出来
+        % 把有效的血压节拍对应的心搏节拍/PPG节拍筛选出来
         lpwt = lpwt(union(irpossbp, irposdbp), :); 
         [~, legalppgpos, ~] = intersect(sigs.ppgpeak(:,1), lpwt(:,3));
         [features,featureNames]  = calculatePWFeaturesWithoutDic(sigs.ppg, sigs.ppgpeak(legalppgpos,:), sigs.ppgvalley(legalppgpos,:));
@@ -26,15 +26,21 @@ for i=shift:shift+len-1
         %% 找到所有的合法心搏节拍对应的血压节拍
         [~, irposdbp, ifeatdbp] = intersect(rdbp, features(:,1));
         [~, irpossbp, ifeatsbp] = intersect(rsbp, features(:,1));
-        features = [features, zeros(size(features,1), 2)];
+        features = [features, zeros(size(features,1), 4)];
+        %% 筛选每一合法拍所对应的心率
+        [~, irposhr, ~] = intersect(lrpos(:,1), features(:, 1));
+        features(:, end - 3) = lrpos(irposhr, 2);
+        %% 筛选出每一合法节拍所对应的pwt
+        [~, irpospwt, ~] = intersect(lpwt(:,1), features(:,1));
+        features(:, end - 2) = lpwt(irpospwt, 2);
         features(ifeatsbp, end-1) = sigs.bp(lsbpann(iannpossbp(irpossbp), 3));
         features(ifeatdbp, end) = sigs.bp(ldbpann(iannposdbp(irposdbp), 3)); 
 
         %% 4 写入到csv文件
-        name = cell (1, 3 + length(featureNames));
+        name = cell (1, 5 + length(featureNames));
         name(1) = {'rpeakpos'};
         name(2:length(featureNames) + 1) = featureNames(1:end);
-        name(end-1:end) = {'sbps', 'dbps'};
+        name(end-3:end) = {'hr', 'pwtt', 'sbps', 'dbps'};
         BWriteMats2CSV([matNames{i}(1:end-length('.mat')),'.csv'], features, name);
     catch e
         disp([matNames{i} 'error: ' e.message])
@@ -44,9 +50,11 @@ end
 end
 
 function rpos = getLegalRpos(rpos)
-    drpos = diff(rpos) / getSampleRate();
-    rpos = rpos(1:end - 1);
-    rpos = rpos(drpos < 60 / Constants.MIN_HR & drpos > 60 / Constants.MAX_HR);
+%% 获取合法的心搏节拍对应的ｒ波位置序列，以及这些ｒ波位置所对应的心率值
+    rpos = rpos(:);
+    drpos = getSampleRate() * 60 ./ diff(rpos); % 这个就是心率了
+    rpos = [rpos(1:end - 1) drpos];
+    rpos = rpos(drpos >= Constants.MIN_HR & drpos <= Constants.MAX_HR, :);
 end
 
 function mergedppgfeatures = getMergedPPGFeatures(ppgfeatures, lpwt)
