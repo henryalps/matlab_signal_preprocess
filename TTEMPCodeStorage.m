@@ -1,3 +1,11 @@
+%% 将长时数据的长度保存到mat文件
+currentDir = pwd;
+cd /home/test/WFDBDATA/3.new
+matNames = BGetNamesFromFile('alllongtimematnames');
+TGetSigLenList(matNames);
+cd(currentDIr)
+return
+
 %% 测试逐拍特征提取代码
 names = load('cextractfeature.mat');
 names = names.cextractfeature;

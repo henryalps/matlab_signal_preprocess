@@ -1,6 +1,6 @@
 function [startpos, stoppos] = TGetLongestTenMinuteSegment(pos)
-%% 用于找到一个10min时间窗的起始位置和结束位置，使得在该窗内的数据点数最多
-WIN_LEN = 10 * 60 * getSampleRate();
+%% 用于找到一个时间窗的起始位置和结束位置，使得在该窗内的数据点数最多
+WIN_LEN = Constants.THEROLD_PACE_TO_PACE_TIME * getSampleRate();
 winlen = zeros(1, length(pos));
 winEnd = 0;
 for i = 1:length(winlen)

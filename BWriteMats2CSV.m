@@ -9,7 +9,7 @@ function BWriteMats2CSV(csvfilename, datamat, namecell)
 % <><><datamat<><><>
 % <><><><><><><><><>
 % FILEPATH = '/home/test/Herui-Matlab/data/csv';%'/home/test/Herui-Matlab/data/csv'; % '/mnt/code/matlab/data/csv';
-FILEPATH = Constants.APPENDIX_PACE_2_PACE_LONG_CSV;
+FILEPATH = Constants.APPENDIX_PACE_2_PACE_LONG_LONG_CSV; %APPENDIX_PACE_2_PACE_LONG_CSV
 if ~exist(FILEPATH,'dir') 
 %     error(['WRITE CSV FAIL! directory does not exist: ',FILEPATH]);
     return

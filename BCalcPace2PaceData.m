@@ -1,7 +1,10 @@
 function BCalcPace2PaceData(shift, len)
 %% 计算逐拍脉搏波特征组 - 血压值对，并存入csv文件
-matNames = load('cextractfeature.mat');
-matNames = matNames.cextractfeature;
+% matNames = load('cextractfeature.mat');
+% matNames = matNames.cextractfeature;
+currentDir = pwd;
+cd /home/test/WFDBDATA/3.new
+matNames = BGetNamesFromFile('alllongtimematnames');
 for i=shift:shift+len-1
     try
         sigs = load(matNames{i});        
@@ -41,12 +44,22 @@ for i=shift:shift+len-1
         name(1) = {'rpeakpos'};
         name(2:length(featureNames) + 1) = featureNames(1:end);
         name(end-3:end) = {'hr', 'pwtt', 'sbps', 'dbps'};
-        BWriteMats2CSV([matNames{i}(1:end-length('.mat')),'.csv'], features, name);
+%         BWriteMats2CSV([matNames{i}(1:end-length('.mat')),'.csv'], features, name);
+        sbpnums = features(features(:,end-1)~=0,:);
+        dbpnums = features(features(:,end)~=0,:);
+        %% 根据总时长是否超出阈值(s)来确定是否要将某一组数据保存到csv文件
+        if sbpnums(end,1) - sbpnums(1,1) >= Constants.THEROLD_PACE_TO_PACE_TIME * getSampleRate()
+            TWrite2CsvFiles('', Constants.SBP_FOLDER_NAME, sbpnums, name, [matNames{i}(1:end-length('.mat')),'.csv']); 
+        end
+        if dbpnums(end,1) - dbpnums(1,1) >= Constants.THEROLD_PACE_TO_PACE_TIME * getSampleRate()
+            TWrite2CsvFiles('', Constants.DBP_FOLDER_NAME, dbpnums, name, [matNames{i}(1:end-length('.mat')),'.csv']);
+        end
     catch e
         disp([matNames{i} 'error: ' e.message])
         continue
     end
 end
+cd(currentDir)
 end
 
 function rpos = getLegalRpos(rpos)
