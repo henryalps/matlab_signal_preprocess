@@ -1,3 +1,41 @@
+%% 将测试集的极差与标准差添加到meta文件内
+cd /home/test/Herui-Matlab/data/csv-pace-2-pace/long-long/metadata
+load 'sbpmeta.mat'
+for i=1:size(sbp_meta,1)
+    load(sbp_meta{i, 9})
+    sbp_meta{i, 10} = sbpnums(sbp_meta{i, 4}:sbp_meta{i, 5}, end-1);
+    sbp_meta{i, 11} = std(sbp_meta{i,10});
+    sbp_meta{i, 10} = max(sbp_meta{i,10}) - min(sbp_meta{i,10});
+end
+save('sbpmeta.mat', 'sbp_meta')
+return
+
+%% 算错的测试集长度重新计算
+cd /home/test/Herui-Matlab/data/csv-pace-2-pace/long-long/metadata
+load 'dbpmeta.mat'
+for i=1:size(dbp_meta,1)
+    load(dbp_meta{i, end})
+    dbp_meta{i, 8} = dbpnums(dbp_meta{i, 6}, 1) - dbpnums(dbp_meta{i, 5}, 1);
+end
+save('dbpmeta.mat', 'dbp_meta')
+
+%% 试图将放错位置的sbp文件移到正确位置
+currentDir = pwd;
+cd(Constants.APPENDIX_PACE_2_PACE_LONG_LONG_CSV)
+cd(Constants.METADATA_FOLDER_NAME)
+load('sbpmeta.mat')
+% cd(Constants.APPENDIX_PACE_2_PACE_LONG_LONG_CSV)
+% for i = 0:length(sbp_meta) / 10 - 1
+%     try
+%         movefile(fullfile(Constants.APPENDIX_PACE_2_PACE_LONG_LONG_CSV, Constants.DBP_FOLDER_NAME,'test', sbp_meta{i*10 + 1}),...
+%             fullfile(Constants.APPENDIX_PACE_2_PACE_LONG_LONG_CSV, Constants.SBP_FOLDER_NAME,'test', sbp_meta{i*10 + 1}))
+%     catch e
+%         continue
+%     end
+% end
+cd(currentDir)
+return
+
 %% 将长时数据的长度保存到mat文件
 currentDir = pwd;
 cd /home/test/WFDBDATA/3.new
