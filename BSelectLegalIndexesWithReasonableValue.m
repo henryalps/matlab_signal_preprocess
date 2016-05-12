@@ -1,6 +1,6 @@
 function indexes = BSelectLegalIndexesWithReasonableValue(bp, indexes, type)
 %%
-%     if type == Constants.TYEP_SBP
+%     if type == Constants.TYPE_SBP
 %         indexes = indexes(bp(indexes) <= Constants.MAX_SBP & bp(indexes) >= Constants.MIN_SBP);
 %     elseif type == Constants.TYPE_DBP        
 %         indexes = indexes(bp(indexes) <= Constants.MAX_DBP & bp(indexes) >= Constants.MIN_DBP);

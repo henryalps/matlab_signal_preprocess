@@ -22,7 +22,8 @@ mse_statistics = [mean(cell2mat(meta_data_valid(:, 4))) std(cell2mat(meta_data_v
 test_six_hour_strong_corr = (cell2mat(meta_data_valid(:,11)) == 3 & cell2mat(meta_data_valid(:,7)));
 meta_data_valid_six_hour_pos = meta_data_valid(test_six_hour_strong_corr, :);
 [~, indexes] = sort(cell2mat(meta_data_valid_six_hour_pos(:, 2)), 'descend');
-% saveLongTimeComparationPics(meta_data_valid_six_hour_pos(indexes, 1));
+
+% saveLongTimeComparationPics(meta_data(all_valid, 1));
 
 %% 6小时测试集的相关性
 test_six_hour = cell2mat(meta_data_valid(:,11)) == 3;
@@ -55,7 +56,7 @@ strong_corr_num =  sum(cell2mat(meta_data(all_valid, 7)));
 %% 各种时间比例对应的误差和相关性
 [mses, corrs] = getMeanMSEAndCorr(meta_data, all_valid, time_scale_pos);
 
-%% 训练集极差与均方误差的关系曲线
+%% 训练集极差与ca均方误差的关系曲线
 mplot(cell2mat(meta_data(all_valid, 13)), cell2mat(meta_data(all_valid, 4)),1);
 
 %% 测试集极差与均方误差的关系曲线
@@ -73,6 +74,10 @@ mplot(cell2mat(meta_data(all_valid, 5)), cell2mat(meta_data(all_valid, 2)),5);
 %% 训练集极差/测试集极差与相关性的关系曲线
 mplot(cell2mat(meta_data(all_valid, 13))./cell2mat(meta_data(all_valid, 5)), cell2mat(meta_data(all_valid, 2)),6);
 
+meta_data = meta_data(all_valid,:);
+%% 保存到mat文件
+save(fullfile(Constants.APPENDIX_PACE_2_PACE_LONG_LONG_CSV, Constants.METADATA_FOLDER_NAME, ['0_' file_name '.mat']), 'meta_data');
+
 disp('debug')
 end
 
@@ -80,7 +85,11 @@ function saveLongTimeComparationPics(csv_file_names)
 set(0,'DefaultFigureVisible', 'off');
 for index =  1:length(csv_file_names)
     mat_name = strrep(csv_file_names{index}, 'csv', 'mat');
-    load(fullfile(Constants.APPENDIX_PACE_2_PACE_LONG_LONG_CSV, 'results', Constants.DBP_FOLDER_NAME, 'RF', mat_name))
+    try
+            load(fullfile(Constants.APPENDIX_PACE_2_PACE_LONG_LONG_CSV, 'results', Constants.DBP_FOLDER_NAME, 'RF', mat_name))
+    catch e
+        continue
+    end
     fig = figure;
     plot(orig, 'o-'), hold on, plot(est, 'go-'), title([mat_name ,  ' ' , length(orig)])
     saveFigure(fig, Constants.APPENDIX_PICS, strrep(mat_name, '.mat',''));

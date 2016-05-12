@@ -9,6 +9,7 @@ function BWriteMats2CSV(csvfilename, datamat, namecell)
 % <><><datamat<><><>
 % <><><><><><><><><>
 % FILEPATH = '/home/test/Herui-Matlab/data/csv';%'/home/test/Herui-Matlab/data/csv'; % '/mnt/code/matlab/data/csv';
+
 FILEPATH = Constants.APPENDIX_PACE_2_PACE_LONG_LONG_CSV; %APPENDIX_PACE_2_PACE_LONG_CSV
 if ~exist(FILEPATH,'dir') 
 %     error(['WRITE CSV FAIL! directory does not exist: ',FILEPATH]);
@@ -23,5 +24,6 @@ end
 % namecell{1} = ['%', namecell{1}];
 dlmwrite(csv_filename,strjoin(namecell,','),''); %write header to csv_filename
 dlmwrite(csv_filename,datamat,'-append','delimiter',',','precision',16); %append the data to csv_filename
+disp(['write ' csv_filename ' end'])
 
 end

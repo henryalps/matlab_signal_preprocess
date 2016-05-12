@@ -1,0 +1,16 @@
+function NEWTEMP()
+load(fullfile(Constants.APPENDIX_PACE_2_PACE_LONG_LONG_CSV, ...
+    Constants.METADATA_FOLDER_NAME, Constants.METADATA_MAT_INFO_FILE_NAME));
+ for index = 1:length(matNames)
+    try
+      mat_file_path = fullfile(Constants.APPENDIX_PACE_2_PACE_LONG_LONG_CSV_OLD, 'sbpmat', matNames{index});
+            sig = load(mat_file_path);
+            sig = sig.sbpnums;
+disp(size(sig))
+if sum(isNaN(sig))>0
+disp(mat_file_path)
+end
+catch e
+end
+ end
+end

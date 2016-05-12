@@ -1,4 +1,4 @@
-function BCalcPace2PaceData(shift, len)
+﻿function BCalcPace2PaceData(shift, len)
 %% 计算逐拍脉搏波特征组 - 血压值对，并存入csv文件
 % matNames = load('cextractfeature.mat');
 % matNames = matNames.cextractfeature;

@@ -37,7 +37,7 @@ function [sbpann,dbpann,isLegal] = AExtractSbpAndDbpFromBp(bp, bpann,tm)
 %         end
         
         if length(sbpann) > length(dbpann)
-            [sbpann, dbpann] = BDistractSbpAndDbpFromBp(bp, sbpann, Constants.TYEP_SBP);
+            [sbpann, dbpann] = BDistractSbpAndDbpFromBp(bp, sbpann, Constants.TYPE_SBP);
         else
             [sbpann, dbpann] = BDistractSbpAndDbpFromBp(bp, dbpann, Constants.TYPE_DBP);
         end

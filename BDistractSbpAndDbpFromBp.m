@@ -1,7 +1,7 @@
 function [sbpann,dbpann] = BDistractSbpAndDbpFromBp(bp, bppos, varargin)
 %% 将本来在一个数组中的收缩/舒张压位置分散到两个数组中。该方法针对的是只检出了DBP（或SBP）的信号，使用最简单的极值方式在两个DBP间寻找SBP（或在两个SBP间寻找DBP）
 % INPUT
-% varargin = Constants.TYEP_SBP/TYEP_DBP
+% varargin = Constants.TYPE_SBP/TYEP_DBP
 % OUTPUT
 % s/dbpann [1*N]矩阵 RT
 %% 确定检出的是DBP还是SBP
@@ -75,7 +75,7 @@ end
 
 %% 最后把不合法值剔除掉
 if type ~=Constants.TYPE_PPG_PEAK
-    sbpann = BSelectLegalIndexesWithReasonableValue(bp, sbpann, Constants.TYEP_SBP);
+    sbpann = BSelectLegalIndexesWithReasonableValue(bp, sbpann, Constants.TYPE_SBP);
     dbpann = BSelectLegalIndexesWithReasonableValue(bp, dbpann, Constants.TYPE_DBP);
 end
 

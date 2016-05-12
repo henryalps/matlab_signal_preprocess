@@ -1,3 +1,520 @@
+%% 小波法的结果对比
+getdicNotchAndPeakRecurly(moveIllegalPoints(sig),...
+    moveIllegalPoints(peak),moveIllegalPoints(valley));
+return
+
+% %% 计算选中数据所对应的个体数
+% names = BGetNamesFromFile('alllongtimematnames');
+% nums = zeros(1,47000);
+% for i=1:length(names)
+%     tmp = names{i};
+%     if nums(str2num(tmp(2:6)))==0
+%         nums(str2num(tmp(2:6))) = 1;
+%     end
+% end
+% disp(sum(nums))
+% return
+% 
+% %% 绘制舒张压与收缩压的检测结果
+% close all
+% load('cextractfeature.mat')
+% load(cextractfeature{10})
+% time = (1:length(bp))/getSampleRate();
+% plot(time, bp);
+% hold on
+% plot(time(dbpann),bp(dbpann),'g*')
+% hold on
+% plot(time(sbpann),bp(sbpann),'ro')
+% xlim([1,10])
+% ylim([35,115])
+% 
+% legend('血压波','舒张压检测结果','收缩压检测结果')
+% xlabel('时间(秒)')
+% ylabel('连续血压(mmHg)')
+% return
+% 
+% 
+% %% 绘制舒张压检测结果
+% close all
+% load('cextractfeature.mat')
+% load(cextractfeature{10})
+% time = (1:length(bp))/getSampleRate();
+% plot(time, bp);
+% hold on
+% plot(time(bpann),bp(bpann),'ro')
+% xlim([1,10])
+% ylim([35,115])
+% legend('血压波','舒张压检测结果')
+% xlabel('时间(秒)')
+% ylabel('连续血压(mmHg)')
+% return
+% 
+% %% 绘制典型血压波
+% load('a44005_0055.mat')
+% bp = bp(100:189);
+% time = (1:length(bp))/getSampleRate();
+% plot(time,bp);
+% hold on
+% plot(time(13),bp(13),'b*')
+% hold on
+% plot(time(31),bp(31),'ro');
+% legend('血压波','舒张压','收缩压')
+% xlabel('时间(秒)')
+% ylabel('连续血压(mmHg)')
+% return
+% 
+% %% 绘制R波检测结2339果
+plot(sig(1,:),sig(2,:));
+hold on
+plot(peak(1,:),peak(2,:),'ro');
+xlim([1,10])
+xlabel('时间(秒)')
+ylabel('幅度')
+legend('ECG信号','R波')
+return
+
+%% 绘制论文用到的非法ECG
+% subplot(2,2,1)
+% n = 4;
+% startpos = 261;
+% endpos = 355;
+% load(matNames{n});
+% ecg = ecg(startpos:endpos);
+% t = (1:length(ecg))/getSampleRate();
+% plot(t, ecg);
+% xlabel('time(s)')
+% ylabellot(time,bp);
+% hold on
+% plot(time(13),bp(13),'b*')
+% hold on
+% plot(time(31),bp(31),'ro');
+% legend('血压波','舒张压','收缩压')
+% xlabel('time(s)')
+% ylabel('ABP(mmHg)')
+% return
+% 
+% %% 绘制R波检测结果
+% plot(sig(1,:)/125,sig(2,:));
+% hold on
+% plot(peak(1,:)/125,peak(2,:),'ro');
+% xlim([1,10])
+% xlabel('time(s)')
+% ylabel('ECG')
+% legend('ECG信号','R波')
+% return
+
+%% 绘制论文用到的非法ECG
+subplot(2,2,1)
+n = 4;
+startpos = 261;
+endpos = 355;
+load(matNames{n});
+ecg = ecg(startpos:endpos);
+t = (1:length(ecg))/getSampleRate();
+plot(t, ecg);
+xlim([t(1) t(end)])
+x_label = xlabel('时间(秒)');
+y_label = ylabel('幅度');
+title(matNames{n})
+
+subplot(2,2,2)
+n = 5;
+startpos = 285;
+endpos = 358;
+load(matNames{n});
+ecg = ecg(startpos:endpos);
+t = (1:length(ecg))/getSampleRate();
+plot(t, ecg);
+xlim([t(1) t(end)])
+x_label = xlabel('时间(秒)');
+y_label = ylabel('幅度');
+title(matNames{n})
+
+subplot(2,2,3)
+n = 35;
+startpos = 438;
+endpos = 540;
+load(matNames{n});
+ecg = ecg(startpos:endpos);
+t = (1:length(ecg))/getSampleRate();
+plot(t, ecg);
+xlim([t(1) t(end)])
+x_label = xlabel('时间(秒)');
+y_label = ylabel('幅度');
+title(matNames{n})
+
+subplot(2,2,4)
+n = 38;
+startpos = 581;
+endpos = 663;
+load(matNames{n});
+ecg = ecg(startpos:endpos);
+t = (1:length(ecg))/getSampleRate();
+plot(t, ecg);
+xlim([t(1) t(end)])
+x_label = xlabel('时间(秒)');
+y_label = ylabel('幅度');
+title(matNames{n})
+return
+%('ECG')
+title(matNames{n})
+
+subplot(2,2,2)
+n = 5;
+startpos = 285;
+endpos = 358;
+load(matNames{n});
+ecg = ecg(startpos:endpos);
+t = (1:length(ecg))/getSampleRate();
+plot(t, ecg);
+x_label = xlabel('时间(秒)');
+y_label = ylabel('幅度');
+title(matNames{n})
+
+subplot(2,2,3)
+n = 35;
+startpos = 438;
+endpos = 540;
+load(matNames{n});
+ecg = ecg(startpos:endpos);
+t = (1:length(ecg))/getSampleRate();
+plot(t, ecg);
+x_label = xlabel('时间(秒)');
+y_label = ylabel('幅度');
+title(matNames{n})
+
+subplot(2,2,4)
+n = 38;
+startpos = 581;
+endpos = 663;
+load(matNames{n});
+ecg = ecg(startpos:endpos);
+t = (1:length(ecg))/getSampleRate();
+plot(t, ecg);
+x_label = xlabel('时间(秒)');
+y_label = ylabel('幅度');
+title(matNames{n})
+return
+
+%% 绘制论文用到的ECG
+matNames = BGetNamesFromFile('alllongtimematnames');
+load(matNames{102})
+ecg = ecg((220:305));
+t = (1:length(ecg))/getSampleRate();
+tex = {'\leftarrow P','\leftarrow Q','\leftarrow R',...
+    '\leftarrow S','\leftarrow T','\leftarrow U'};
+i = 1;
+plot(t,ecg)
+hold on
+p = 20;
+plot(t(p),ecg(p),'ro');
+text(t(p),ecg(p),tex{i},'FontSize',14);
+i = i + 1;
+hold on
+
+p = 31;
+plot(t(p),ecg(p),'ro');
+text(t(p),ecg(p),tex{i},'FontSize',14);
+i = i + 1;
+hold on
+
+p = 36;
+plot(t(p),ecg(p),'ro');
+text(t(p),ecg(p),tex{i},'FontSize',14);
+i = i + 1;
+hold on
+
+p = 43;
+plot(t(p),ecg(p),'ro');
+text(t(p),ecg(p),tex{i},'FontSize',14);
+i = i + 1;
+hold on
+
+p = 68;
+plot(t(p),ecg(p),'ro');
+text(t(p),ecg(p),tex{i},'FontSize',14);
+i = i + 1;
+hold on
+
+p = 75;
+plot(t(p),ecg(p),'ro');
+text(t(p),ecg(p),tex{i},'FontSize',14);
+i = i + 1;
+
+x_label = xlabel('时间(秒)');
+y_label = ylabel('幅度');
+set(x_label,'FontSize',12);
+set(y_label,'FontSize',12);
+set(gca,'FontSize',12);
+return
+% 
+% % %% 统计不同类别的数据
+% % % data = csv2cell('~/下载/all.csv');
+% % adultNum = [0 0];
+% % childNum = [0 0];
+% % tmp = zeros(1,40000);
+% % for i = 1:length(data)
+% %     if isempty(strfind(data{i,2},'null'))
+% %         num = data{i,2};
+% %         if tmp(num) == 0            
+% %             if isempty(strfind(data{i,3},'n'))
+% %                 adultNum(1) = adultNum(1) + 1;
+% %             else
+% %                 childNum(1) = childNum(1) + 1;
+% %             end
+% %         end
+% %         tmp(num) = tmp(num) + 1;
+% %     else    
+% %         if isempty(strfind(data{i,3},'n'))
+% %                 adultNum(2) = adultNum(2) + 1;
+% %             else
+% %                 childNum(2) = childNum(2) + 1;
+% %         end
+% %     end
+% % end
+% % return
+% % 
+% % %% 画小波法与其它几种方法检测结果图
+% % load('a44005_0052.mat');
+% % ppgpeak=ppgpeak(12:42,1);
+% % ppgvalley=ppgvalley(12:42,1);
+% % ppg = ppg(1:max(ppgpeak(end), ppgvalley(end)));
+% % % peak(1)对应valley(2)，
+% % plot(ppg)
+% % hold on
+% % plot(ppgpeak, ppg(ppgpeak), '*');
+% % plot(ppgvalley,ppg(ppgvalley),'o');
+% % [dnIdx, dpIdx] = detectDicNotchAndDicPeakInDescendingEdgeUseWavelet(ppg(ppgpeak(1):ppgvalley(2)), getSampleRate()*0.2);
+% % plot(dnIdx, ppg(dnIdx+ppgpeak(1)),'*');
+% % plot(dpIdx, ppg(dpIdx+ppgpeak(1)),'*');
+% % return
+% % 
+% % for i=10:100
+% %     close all
+% %     load(matNames{i});
+% %     disp(matNames{i})
+% %     ppgpeak = ppgpeak(1:50,1);
+% %     ppgvalley = ppgvalley(1:50,1);
+% %     ppg = ppg(1:max(ppgpeak(end), ppgvalley(end)));
+% %     plot(ppg)
+% %     hold on
+% %     plot(ppgpeak, ppg(ppgpeak), '*');
+% %     plot(ppgvalley,ppg(ppgvalley),'o');
+% %     pause
+% % end
+% % return
+% % 
+% % %% 在同一个图中画3种信号及其标定
+% % clear
+% % bunextractfeature = load('cextractfeature.mat');
+% % bunextractfeature = bunextractfeature.cextractfeature;
+% % for i = 1:length(bunextractfeature)
+% %     close all
+% %     load(bunextractfeature{i})
+% %     xlowerlim = 1;
+% %     xupperlim = 2000;
+% %     figure
+% %     subplot(3,1,1)
+% %     plot(tm, bp)
+% %     xlim([tm(xlowerlim),tm(xupperlim)])
+% %     title(bunextractfeature{i})
+% %     hold on
+% %     [sbpann, dbpann, ~] = AExtractSbpAndDbpFromBp(bp, bpann, tm);
+% %     plot(tm(sbpann),bp(sbpann),'*r');
+% %     plot(tm(dbpann),bp(dbpann),'og');
+% %     subplot(3,1,2)
+% %     plot(tm, ecg)
+% %     xlim([tm(xlowerlim),tm(xupperlim)])
+% %     hold on
+% %     plot(tm(rpos),ecg(rpos),'*r');
+% %     subplot(3,1,3)
+% %     plot(tm, ppg)
+% %     xlim([tm(xlowerlim),tm(xupperlim)])
+% %     hold on
+% %     [ppgvalley, ppgpeak, isLegal] = BGetOnsetsAndPeaksOfPPG(ppg, tm);
+% %     plot(tm(ppgpeak(:,1)), ppg(ppgpeak(:,1)),'*r');
+% %     ppgvalley = ppgvalley(ppgvalley(:,1)>0);
+% %     plot(tm(ppgvalley(:,1)), ppg(ppgvalley(:,1)),'og');
+% %     
+% % %     figure    
+% % %     subplot(3,1,1)
+% % %     plot(tm,bp)
+% % %     xlim([tm(xlowerlim),tm(xupperlim)])
+% % %     title(bunextractfeature{i})
+% % %     
+% % %     subplot(3,1,2)
+% % %     plot(tm,ecg)
+% % %     xlim([tm(xlowerlim),tm(xupperlim)])
+% % %     
+% % %     subplot(3,1,3)
+% % %     plot(tm,ppg)
+% % %     xlim([tm(xlowerlim),tm(xupperlim)])
+% % %     
+% % %     figure
+% % %     plot(tm,ecg, 'b')
+% % %     hold on
+% % %     plot(tm(rpos),ecg(rpos),'bo');
+% % %     hold on
+% % %     plot(tm,ppg, 'r')
+% % %     hold on
+% % %     plot(tm(ppgpeak(:,1)), ppg(ppgpeak(:,1)),'*r');
+% % %     xlim([tm(xlowerlim),tm(xupperlim)])
+% %     pause
+% % end
+% % return
+% % 
+% % %% 读取存储的元数据分析结果mat文件，并保存到可供pycharm使用的mat文件中
+% % filename = '0_results_RF_sbpl6h.mat';
+% % load(fullfile(Constants.APPENDIX_PACE_2_PACE_LONG_LONG_CSV, Constants.METADATA_FOLDER_NAME, filename));
+% % mse0 = cell2mat(meta_data(:,4))';
+% % rangetrain0 = cell2mat(meta_data(:,13))';
+% % rangetest0 = cell2mat(meta_data(:,5))';
+% % save(['py_' filename], 'mse0', 'rangetrain0', 'rangetest0');
+% % return
+% % 
+% % %% 插值后绘制
+% % x=(1:length(y));
+% % xi=(1:0.0001:length(y));
+% % y1=interp1(x,y,xi,'spline');
+% % plot(y1,'r','linewidth',1.6)
+% % return
+% 
+% %% 绘制一个平滑的ecg
+% load(matNames{102})
+% span=5;
+% y = ecg(1:1000);
+% yy = y;
+%     l = length(y);
+% 
+%     for i = 1 : l
+%         if i < span
+%             d = i;
+%         else
+%             d = span;
+%         end
+% 
+%         w = d - 1;
+%         p2 = floor(w / 2);
+% 
+%         if i > (l - p2)
+%            p2 = l - i; 
+%         end
+% 
+%         p1 = w - p2;
+% 
+%         yy(i) = sum(y(i - p1 : i + p2)) / d;
+%     end
+%     x=(1:1000);
+%     y=[yy(300:348) yy(300:348)];
+%     axis off
+%     set(gca,'xtick',[],'ytick',[])
+%     box off
+%     plot([y(20:end)],'r','linewidth',1.5, 'linesmoothing', 'on')    
+%     ylim([0,1.5])
+%     return
+ 
+%%依次绘制一系列ECG波形
+for i=1:length(matNames)
+    load(matNames{i})
+    x=(1:1000);
+    plot(ecg(1:1000))
+%     plot(smooth(x,ecg(1:1000),0.25,'rloess'))
+    disp(i)
+    pause
+end
+return
+
+%% 计算排名最高特征之间的相关性
+featureNames = {'PRT', 'RBAr',...
+            'RBW10', 'RBW25', 'RBW33', 'RBW50', 'RBW66', 'RBW75',...
+            'DBW10', 'DBW25', 'DBW33', 'DBW50', 'DBW66', 'DBW75',...
+            'KVAL', 'AmBE', 'pwtt', 'hr'};
+
+dbp_rank = load('dbp.mat');
+sbp_rank = load('sbp.mat');
+
+dbp_data = load('dbpall_data.mat');
+sbp_data = load('sbpall_data.mat');
+
+[corrs, pval] = TGetFeatureCorr(sbp_rank.est(1:10,:), sbp_rank.orig, sbp_data.orig, featureNames);
+for i=1:size(corrs,1)-1
+    for j=i+1:size(corrs,1)
+        if corrs(i,j) > 0.85 && pval(i,j) < 0.05
+            disp([sbp_rank.est(i,:) '  ' sbp_rank.est(j,:)])
+        end
+    end
+end
+disp('**************')
+[corrs, pval] = TGetFeatureCorr(dbp_rank.est(1:10,:), dbp_rank.orig, dbp_data.orig, featureNames);
+for i=1:size(corrs,1)-1
+    for j=i+1:size(corrs,1)
+        if corrs(i,j) > 0.85 && pval(i,j) < 0.05
+            disp([dbp_rank.est(i,:) '  ' dbp_rank.est(j,:)])
+        end
+    end
+end
+return
+
+%% 绘制所有的SBP与DBP估计结果
+close all
+load('pairs_bp_mat')
+start_pos = min(pairs_dbp(1,1), pairs_sbp(1,1));
+
+%变成容易重采样的长度
+% pairs_dbp = pairs_dbp(:, 1:850);
+% pairs_sbp = pairs_sbp(:, 1:850);
+
+% pairs_dbp = pairs_dbp(:, 1:5:end);
+% pairs_sbp = pairs_sbp(:, 1:5:end);
+
+pairs_dbp(1,:) = (pairs_dbp(1,:) - start_pos) / getSampleRate() / 60;
+pairs_sbp(1,:) = (pairs_sbp(1,:) - start_pos)  / getSampleRate() / 60;
+
+% 平滑
+for i=2:size(pairs_dbp, 1)
+    pairs_dbp(i,:) = smooth(pairs_dbp(1,:), pairs_dbp(i,:), 0.25, 'rloess');    
+    pairs_sbp(i,:) = smooth(pairs_sbp(1,:), pairs_sbp(i,:), 0.25, 'rloess');
+end
+
+
+dbp = pairs_dbp;
+sbp = pairs_sbp;
+save('data.mat','dbp','sbp');
+
+line_specs = {'r', 'g--', 'b:', 'm-*'};
+marker_size= {1,10,1,1};
+line_width = {2,1,1,1};
+subplot(2,1,1)
+for i = 1:length(line_specs)
+    plot(pairs_sbp(1,:), pairs_sbp(i+1,:),...
+        line_specs{i},'Linewidth',line_width{i},...        
+         'MarkerFaceColor',[1,1,1],...
+         'MarkerSize',marker_size{i}), hold on
+end
+
+subplot(2,1,2)
+for i = 1:length(line_specs)
+    plot(pairs_dbp(1,:), pairs_dbp(i+1,:), ...
+        line_specs{i},'Linewidth',line_width{i},...        
+         'MarkerFaceColor',[1,1,1],...
+         'MarkerSize',marker_size{i}), hold on
+end
+
+return
+
+%% 绘制几种估计血压的比对
+
+orig_resample = resample(orig, 1, 4);
+
+est_lf_resample = resample(est_lf, 1, 4);
+
+est_rf_resample = resample(est_rf, 1, 4);
+
+est_rf_l_resample = resample(est_rf_l, 1, 4);
+
+plot(orig_resample, 'r'), hold on, plot(est_lf_resample, 'g'),hold on, plot(est_rf_resample, 'b'), hold on, plot(est_lf_l_resample, 'c')
+return
+
 %% 将测试集的极差与标准差添加到meta文件内
 cd /home/test/Herui-Matlab/data/csv-pace-2-pace/long-long/metadata
 load 'sbpmeta.mat'
@@ -343,64 +860,6 @@ return
 % plot(onsets(:,1), ppg(onsets(:,1)),'*g');
 % return
 
-%% 在同一个图中画3种信号及其标定
-clear
-bunextractfeature = load('cextractfeature.mat');
-bunextractfeature = bunextractfeature.cextractfeature;
-for i = 1:length(bunextractfeature)
-    close all
-    load(bunextractfeature{i})
-    xlowerlim = 1;
-    xupperlim = 2000;
-    figure
-    subplot(3,1,1)
-    plot(tm, bp)
-    xlim([tm(xlowerlim),tm(xupperlim)])
-    title(bunextractfeature{i})
-    hold on
-    [sbpann, dbpann, ~] = AExtractSbpAndDbpFromBp(bp, bpann, tm);
-    plot(tm(sbpann),bp(sbpann),'*r');
-    plot(tm(dbpann),bp(dbpann),'og');
-    subplot(3,1,2)
-    plot(tm, ecg)
-    xlim([tm(xlowerlim),tm(xupperlim)])
-    hold on
-    plot(tm(rpos),ecg(rpos),'*r');
-    subplot(3,1,3)
-    plot(tm, ppg)
-    xlim([tm(xlowerlim),tm(xupperlim)])
-    hold on
-    [ppgvalley, ppgpeak, isLegal] = BGetOnsetsAndPeaksOfPPG(ppg, tm);
-    plot(tm(ppgpeak(:,1)), ppg(ppgpeak(:,1)),'*r');
-    ppgvalley = ppgvalley(ppgvalley(:,1)>0);
-    plot(tm(ppgvalley(:,1)), ppg(ppgvalley(:,1)),'og');
-    
-    figure    
-    subplot(3,1,1)
-    plot(tm,bp)
-    xlim([tm(xlowerlim),tm(xupperlim)])
-    title(bunextractfeature{i})
-    
-    subplot(3,1,2)
-    plot(tm,ecg)
-    xlim([tm(xlowerlim),tm(xupperlim)])
-    
-    subplot(3,1,3)
-    plot(tm,ppg)
-    xlim([tm(xlowerlim),tm(xupperlim)])
-    
-    figure
-    plot(tm,ecg, 'b')
-    hold on
-    plot(tm(rpos),ecg(rpos),'bo');
-    hold on
-    plot(tm,ppg, 'r')
-    hold on
-    plot(tm(ppgpeak(:,1)), ppg(ppgpeak(:,1)),'*r');
-    xlim([tm(xlowerlim),tm(xupperlim)])
-    pause
-end
-return
 
 %% 计算逐拍脉搏波特征
 %features = calculatePWFeatures(ppg, peaks,onsets,[],[]);
